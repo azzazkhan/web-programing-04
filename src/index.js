@@ -33,14 +33,29 @@ const processCommand = (command) => {
     switch (command) {
         case 'save':
             getInput('Please enter new note ID:', (id) => {
+                if (!id) {
+                    console.error('Note ID is required for saving note!');
+                    process.exit(1);
+                }
+
                 getInput('Please enter new note name:', (name) => {
+                    if (!name) {
+                        console.error('Note name is required for saving note!');
+                        process.exit(1);
+                    }
+
                     saveNote(id, name, DATASTORE);
                 });
             });
 
             break;
-        case 'show':
-            getInput('Please enter note ID to show:', (id) => {
+        case 'load':
+            getInput('Please enter note ID to load:', (id) => {
+                if (!id) {
+                    console.error('Note ID is required for loading note details!');
+                    process.exit(1);
+                }
+
                 loadNote(id, DATASTORE);
             });
 
@@ -49,10 +64,15 @@ const processCommand = (command) => {
             listNotes(DATASTORE);
             break;
         default:
-            console.error('Invalid command provided! Available commands are: save, show, list');
+            console.error('Invalid command provided! Available commands are: save, load, list');
     }
 };
 
 let command = process.argv[2];
+
+if (!command) {
+    console.error('Please provide a command! Available commands are: save, load, list');
+    process.exit(1);
+}
 
 processCommand(command);
